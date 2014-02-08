@@ -48,8 +48,6 @@ var PaginatedTableView = Backbone.Marionette.ItemView.extend({
 		// Get the pagination boundaries sorted.
 		this.updatePagerRange();
 
-		console.debug('initPagination, this:', this);
-
 	},
 
 	/**
@@ -123,13 +121,15 @@ var PaginatedTableView = Backbone.Marionette.ItemView.extend({
 
 		console.time('PaginatedTableView#onRender');
 
-		// Render new rows.
-		this.ui.rowsContainer.empty();
+		// Render new rows in one go, rather than one-at-a-time.
+		var out = [];
 		_.each(this.pagedModels[this.pagination.currentPage], function (model) {
-			this.ui.rowsContainer.append(_.template(
+			out.push(_.template(
 				this.rowTemplateHtml, model, { variable: 'data' }
 			));
 		}.bind(this));
+		this.ui.rowsContainer.html(out.join(''));
+
 
 		// Render new pagination.
 		this.ui.paginationContainer.html(_.template(
