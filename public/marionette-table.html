@@ -51,7 +51,15 @@
                 var userCollection = new UserCollection();
                 var $loadingElem = $('#loading');
 
-                userCollection.fetch().done(function () {
+                // Load required assets.
+                var templatesXhr = $.get('marionette-templates.html');
+                var collXhr = userCollection.fetch();
+
+                $.when(collXhr, templatesXhr).done(function (collResponse, templatesResponse) {
+
+                    // FIXME Do we really need to inject into the DOM, only to pull back out again as a string?
+                    // Thinking of angular-ng-templates grunt plugin, which compiles html into JS.
+                    $(document.body).append(templatesResponse[0]); // html
                     
                     // TODO Use Marionette's regions/layouts.
                     var tableView = new PaginatedTableView({
@@ -81,78 +89,6 @@
                 });
 
             });
-
-        </script>
-
-        <!-- Table wrapped in div.panel -->
-        <script id="table-template" type="text/html">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Full Name</th>
-                        <th>Email</th>
-                        <th>Updated</th>
-                    </tr>
-                </thead>
-
-                <tbody class="rowsContainer"></tbody>
-
-                <tfoot>
-                    <tr>
-                        <td colspan="4" class="paginationContainer"></td>
-                    </tr>
-                </tfoot>
-
-            </table>
-        </script>
-
-        <!-- Each user gets rendered in this row template. -->
-        <script id="table-row-template" type="text/html">
-            <tr>
-                <td><%= data.id %></td>
-                <td><%= data.get('fullName') %></td>
-                <td><%= data.get('email') %></td>
-                <td><%= data.get('updated') %></td>
-            </tr>
-        </script>
-
-        <script id="pagination-template" type="text/html">
-            
-            <div class="row">
-                <div class="large-10 columns">
-
-                    <div class="pagination-centered">
-                        <ul class="pagination">
-                            
-                            <li class="arrow <%= data.currentPage === 0 ? 'unavailable' : '' %>">
-                                <a href="#" data-pagerIndex="<%= data.currentPage - 1 %>">&laquo;</a>
-                            </li>
-                            
-                            <% for (var i = data.startPagerRange; i < data.endPagerRange; i++) { %>
-                                <li class="<%= (data.currentPage === i) ? 'current' : '' %>">
-                                    <a href="#" data-pagerIndex="<%= i %>"><%= i + 1 %></a>
-                                </li>
-                            <% } %>
-                                                
-                            <li class="arrow <%= (data.currentPage >= data.totalPages) ? 'unavailable' : '' %>">
-                                <a href="#" data-pagerIndex="<%= data.currentPage + 1 %>">&raquo;</a>
-                            </li>
-
-                        </ul>
-                    </div>
-
-                </div>
-                <div class="large-2 columns">
-
-                    <select class="perPageSelector">
-                        <% _.each(data.perPageSelectorOptions, function (num) { %>
-                            <option <%= data.perPage == num ? 'selected' : '' %>><%= num %></option>
-                        <% }); %>
-                    </select>
-
-                </div>
-            </div>
 
         </script>
 
