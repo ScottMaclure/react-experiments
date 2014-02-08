@@ -85,9 +85,26 @@ var ReactTable = React.createClass({displayName: 'ReactTable',
 		e.preventDefault();
 		var s = this.state;
 		s.data[s.edit[0]][s.edit[1]] = e.target.elements[0].value;
-		s.edit = [-1, -1];
+
+        // disabeling saving for now, awaiting for server side implementation
+        // this.saveXhr(s.data[s.edit[0]]);
+
+        s.edit = [-1, -1];
 		this.setState(s);
-	},
+    },
+
+    saveXhr: function(row) {
+        var data = {row:row}
+        var xhr = $.ajax({
+            type: 'PUT',
+            url: '/users-table/',
+            data: data
+        });
+        xhr.done(function (data) {
+            console.log('xhr.done');
+            console.log(data);
+        });
+    },
 
 	render: function () {
 
