@@ -2,7 +2,6 @@
 var PaginatedTableView = Backbone.Marionette.ItemView.extend({
 	
 	template: '#table-template',
-	className: 'panel',	
 
 	initialize: function (options) {
 

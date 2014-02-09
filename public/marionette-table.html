@@ -15,20 +15,28 @@
         <div class="row">
             <div class="large-12 columns">
                 <h1>Marionette Table - Test</h1>
+                <p>Choose your data-source, and load.</p>
             </div>
         </div>
 
-        <!-- Here be rendered HTML by Marionette. -->
-        <div class="row">
-            <div class="large-12 columns">
-                
-                <div id="loading" class="panel callout radius">
-                    <h5>Please wait, loading...</h5>
-                </div>
-                
-                <div id="container"></div>
+        <div class="panel">
 
+            <!-- Pick which datasource we're using -->
+            <div class="row">
+                <div class="large-12 columns fn-dataSourceSelector">
+                    <button class="button small" data-source-type="static">Static JSON Data</button>
+                    <button class="button small" data-source-type="dynamic">Couchdb data (local only)</button>
+                </div>
             </div>
+
+            <!-- Here be rendered HTML by Marionette. -->
+            <div class="row">
+                <div class="large-12 columns">
+                    <div id="loading" class="panel callout radius hide"><h5>Loading... please wait.</h5></div>
+                    <div id="container"></div>
+                </div>
+            </div>
+
         </div>
 
         <!-- JavaScript libraries -->
@@ -46,23 +54,34 @@
         <!-- Bootstrap Application -->
         <script type="text/javascript">
 
-            $(document).ready(function () {
+            var userCollection;
+            var templatesXhr = $.get('marionette-templates.html');
+            var collXhr;
+            var tableView;
+            var $loadingElem;
+            var $container;
 
-                var userCollection = new UserCollection();
-                var $loadingElem = $('#loading');
+            /**
+             * Initialize the app AFTER the User has selected what data source to use.
+             */
+            function initApp (dataSourceType) {
 
-                // Load required assets.
-                var templatesXhr = $.get('marionette-templates.html');
-                var collXhr = userCollection.fetch();
+                $loadingElem.removeClass('hide');
+                $container.empty();
 
-                $.when(collXhr, templatesXhr).done(function (collResponse, templatesResponse) {
+                userCollection = new UserCollection([], {
+                    dataSourceType: dataSourceType
+                });
 
-                    // FIXME Do we really need to inject into the DOM, only to pull back out again as a string?
-                    // Thinking of angular-ng-templates grunt plugin, which compiles html into JS.
-                    $(document.body).append(templatesResponse[0]); // html
-                    
+                // (Re)Load data from datasource.
+                collXhr = userCollection.fetch();
+
+                $.when(collXhr, templatesXhr).done(function () {
+
+                    console.time('initApp render');
+
                     // TODO Use Marionette's regions/layouts.
-                    var tableView = new PaginatedTableView({
+                    tableView = new PaginatedTableView({
                         // TODO Define "columns" here, and pass them down to itemView, for more dynamic display.
                         collection: userCollection,
                         pagination: {
@@ -80,11 +99,35 @@
                         $loadingElem.addClass('hide');
                     });
 
+                    $loadingElem.addClass('hide');
+
                     // Render and append DOM using jQuery.
                     // TODO Faster way to render?
-                    console.time('rendering App');
-                    $('#container').append(tableView.render().$el);
-                    console.timeEnd('rendering App');
+                    $container.html(tableView.render().$el);
+
+                    console.timeEnd('initApp render');
+
+                });
+            }
+
+            $(document).ready(function () {
+
+                $container = $('#container');
+                $loadingElem = $('#loading');
+
+                // Interesting that the promise callback is inside document ready, even though it can be started
+                // beforehand!
+                templatesXhr.done(function (templateHtml) {
+
+                    // FIXME Do we really need to inject into the DOM, only to pull back out again as a string?
+                    // Thinking of angular-ng-templates grunt plugin, which compiles html into JS.
+                    $(document.body).append(templateHtml);
+
+                    // Allow different data sources for demo.
+                    $('.fn-dataSourceSelector').on('click', 'button', function (e) {
+                        e.preventDefault();
+                        initApp($(e.target).data('sourceType'));
+                    });
 
                 });
 
