@@ -1,5 +1,8 @@
 <!-- Table wrapped in div.panel -->
 <script id="table-template" type="text/html">
+
+    <div class="tableActionsContainer"></div>
+
     <table>
         <thead>
             <tr>
@@ -10,6 +13,15 @@
             </tr>
         </thead>
 
+        <tbody class="searchRow hide">
+            <tr>
+                <td><input data-field-name="id"/></td>
+                <td><input data-field-name="fullName"/></td>
+                <td><input data-field-name="email"/></td>
+                <td><input data-field-name="updated"/></td>
+            </tr>
+        </tbody>
+
         <tbody class="rowsContainer"></tbody>
 
         <tfoot>
@@ -19,6 +31,14 @@
         </tfoot>
 
     </table>
+
+</script>
+
+<script id="table-actions-template" type="text/html">
+    <div class="panel">
+        <a href="#" class="button tiny toggleSearch">Search</a>
+        <span>Total: <%= data.pagination.totalModels %></span>
+    </div>
 </script>
 
 <!-- Each user gets rendered in this row template. -->
@@ -34,7 +54,7 @@
 <script id="pagination-template" type="text/html">
     
     <div class="row">
-        <div class="large-10 columns">
+        <div class="large-8 columns">
 
             <div class="pagination-centered">
                 <ul class="pagination">
