@@ -19,24 +19,20 @@
             </div>
         </div>
 
-        <div class="panel">
-
-            <!-- Pick which datasource we're using -->
-            <div class="row">
-                <div class="large-12 columns fn-dataSourceSelector">
-                    <button class="button small" data-source-type="static">Static JSON Data</button>
-                    <button class="button small" data-source-type="dynamic">Couchdb data (local only)</button>
-                </div>
+        <!-- Pick which datasource we're using -->
+        <div class="row">
+            <div class="large-12 columns fn-dataSourceSelector">
+                <button class="button small" data-source-type="static">Static JSON Data</button>
+                <button class="button small" data-source-type="dynamic">Couchdb data (local only)</button>
             </div>
+        </div>
 
-            <!-- Here be rendered HTML by Marionette. -->
-            <div class="row">
-                <div class="large-12 columns">
-                    <div id="loading" class="panel callout radius hide"><h5>Loading... please wait.</h5></div>
-                    <div id="container"></div>
-                </div>
+        <!-- Here be rendered HTML by Marionette. -->
+        <div class="row">
+            <div class="large-12 columns">
+                <div id="loading" class="panel callout radius hide"><h5>Loading... please wait.</h5></div>
+                <div id="container"></div>
             </div>
-
         </div>
 
         <!-- JavaScript libraries -->
@@ -91,7 +87,8 @@
                         },
                         // Document ready matters here!
                         rowTemplateHtml: $('#table-row-template').html(),
-                        paginationTemplateHtml: $('#pagination-template').html()
+                        paginationTemplateHtml: $('#pagination-template').html(),
+                        tableActionsHtml: $('#table-actions-template').html()
                     });
 
                     // Nice way to decouple the loading display from the table view.
