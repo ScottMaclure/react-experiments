@@ -21,15 +21,14 @@ var Clicker = React.createClass({
 		return (
 			<div className="row">
 				<div className="small-6 columns">
-					<button className="button small" onClick={this.handleClick}>Click Me</button>
+                    <ClickerButton onClick={this.handleClick}/>
 				</div>
 				<div className="small-6 columns">
-					<h2 className="subheader">Click count: {this.state.count}</h2>
+                    <ClickerCountDisplay count={this.state.count}/>
 				</div>
 			</div>
 		);
 		/* jshint ignore:end */
 	}
-
 
 });
