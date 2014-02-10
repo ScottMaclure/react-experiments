@@ -17,6 +17,7 @@ var CommentForm = React.createClass({
 			/* jshint ignore:end */
         }
 
+        // TODO Break this up into smaller react components.
 		/* jshint ignore:start */
         return (
             <div className="commentForm">

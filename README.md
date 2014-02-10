@@ -41,8 +41,8 @@ Followong links should show you list of databases you have and list of users
 `http://localhost:5984/_utils/`
 `http://localhost:5984/_utils/database.html?users/`
 
-
 ### Fire up
+
 The index.html page on <http://localhost:3000> has links to each experiment.
 
 ## Offline JSX compiling
