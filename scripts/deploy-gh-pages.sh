@@ -14,6 +14,7 @@ cp -pr public/* ../react-experiments-gh-pages/
 
 # Back to gh-pages
 cd ../react-experiments-gh-pages
+git add .
 git commit -am "Sync public folder into gh-pages repo."
 git push
 
