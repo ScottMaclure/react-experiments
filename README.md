@@ -112,3 +112,5 @@ http://www.reddit.com/r/javascript/comments/1oo1y8
 https://github.com/usepropeller/react.backbone
 
 http://eldar.djafarov.com/2013/11/reactjs-mixing-with-backbone/
+
+http://blog.vjeux.com/?s=react
